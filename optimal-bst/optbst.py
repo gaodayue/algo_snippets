@@ -61,7 +61,25 @@ def opt_cost(keys, freq, get_bst=False):
                     minimal = cost
                     root = r
             table[i][i+s] = (minimal, root)
-    #TODO get_tree impl
+    if get_bst:
+        tree = {}
+        stack = [(0, n-1)]
+        while stack:
+            i, j = stack.pop()
+            root = table[i][j][1]
+            left, right = None, None
+            if root != i:
+                stack.append((i, root-1))
+                left = table[i][root-1][1]
+            if root != j:
+                stack.append((root+1, j))
+                right = table[root+1][j][1]
+            if left is None and right is None:
+                tree[root] = None
+            else:
+                tree[root] = (left, right)
+        return (table[0][n-1][0], tree)
+
     return table[0][n-1][0]
 
 
